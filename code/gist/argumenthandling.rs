@@ -1,4 +1,6 @@
 //necessary module
+//To clarify what @mcarton said, Args implements the ExactSizeIterator, so there's no need to collect the results into a vector. –  Timidger yesterday
+
 use std::env;
 
 fn main() {
