@@ -1,3 +1,5 @@
+// from stackoverflow: https://stackoverflow.com/questions/30684624/what-is-the-best-variant-for-appending-a-new-line-in-a-text-file
+
 use std::fs::OpenOptions;
 use std::io::prelude::*;
 
