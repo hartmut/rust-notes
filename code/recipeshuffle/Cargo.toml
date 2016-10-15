@@ -1,0 +1,23 @@
+# ideas from https://gist.github.com/gkbrk/48fa444360808501e4d1c0bd8f216b9b#file-server-rs
+# currently bad hack that doesn't work
+[package]
+name = "recipeshuffle"
+version = "0.1.0"
+authors = ["Hartmut Prochaska <hartmut.prochaska@gmail.com>"]
+
+[dependencies]
+tokio-core = "0.1" # https://crates.io/crates/tokio-core
+tokio-proto = { git = "https://github.com/tokio-rs/tokio-proto" }
+tokio-service = { git = "https://github.com/tokio-rs/tokio-service" }
+tokio-line = { git = "https://github.com/tokio-rs/tokio-line" }
+tokio-timer = { git = "https://github.com/tokio-rs/tokio-timer" }
+# tokio-middleware = { git = "https://github.com/tokio-rs/tokio-middleware" }
+rand = "0.3" # https://crates.io/crates/rand
+# bytes = { git = "https://github.com/carllerche/bytes" }
+futures = "0.1"
+
+[dev-dependencies]
+env_logger = "0.3.0"
+rand = "0.3.14"
+tokio-timer = { git = "https://github.com/tokio-rs/tokio-timer" }
+# tokio-middleware = { git = "https://github.com/tokio-rs/tokio-middleware" }
