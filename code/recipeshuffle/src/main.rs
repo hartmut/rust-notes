@@ -9,7 +9,7 @@ extern crate tokio_service;
 // extern crate tokio_middleware as middleware;
 
 // use tokio_core::reactor;
-use tokio_core::reactor::Tick;
+// use tokio_core::reactor::Tick;
 // use tokio_core::tcp::TcpListener;
 // use futures::Future;
 use rand::{Rng, thread_rng};
