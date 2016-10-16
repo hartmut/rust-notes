@@ -1,24 +1,13 @@
-// extern crate tokio_core;
 extern crate rand;
 extern crate futures;
 extern crate tokio_core;
-// extern crate tokio_proto as proto;
-// extern crate tokio_line as line;
-// extern crate tokio_middleware as middleware;
 
-// use tokio_core::reactor;
-// use tokio_core::reactor::Tick;
-// use tokio_core::tcp::TcpListener;
-// use futures::Future;
 use rand::{Rng, thread_rng};
 use futures::stream::Stream;
 use tokio_core::reactor::Core;
 use tokio_core::net::TcpListener;
-// use service::Service;
-use std::io::{self, Write, BufReader, BufRead};
+use std::io::{BufReader, BufRead};
 use std::fs::File;
-
-// https://github.com/tokio-rs/tokio-proto/blob/0bfe489f2bd97307024df8f0c7a7ed112f8253e5/examples/listen.rs
 
 fn main() {
     // initialize
@@ -45,7 +34,6 @@ fn main() {
     // create server
     let clients = listener.incoming();
     let answer = clients.and_then(|(socket, _peer_addr)| {
-        // tokio_core::io::write_all(socket, b"Hello!\n");
         let onerecipe = thread_rng().choose(&recipes).unwrap();
         tokio_core::io::write_all(socket, onerecipe.as_bytes())
     });
@@ -54,6 +42,7 @@ fn main() {
         Ok(())
     });
 
+    // and let it run
     lp.run(server).unwrap();
 }
 
@@ -77,20 +66,3 @@ fn read_recipes(file: &str) -> Vec<String> {
     recipes.push(recipe);
     recipes
 }
-
-// reactor when questioned
-// struct Listener {
-//     // socket: TcpListener,
-//     quotes: Vec<String>
-// }
-//
-// impl Listener {
-//     fn tick(&mut self) -> io::Result<Tick> {
-//         while let Some(mut conn) = try!(self.socket.accept()) {
-//             let quote = thread_rng().choose(&self.quotes).unwrap();
-//             try!(conn.write_all(quote.as_bytes()));
-//         }
-//
-//         Ok(Tick::WouldBlock)
-//     }
-// }
