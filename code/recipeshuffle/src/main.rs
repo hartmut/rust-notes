@@ -2,8 +2,6 @@
 extern crate rand;
 extern crate futures;
 extern crate tokio_core;
-extern crate tokio_timer;
-extern crate tokio_service;
 // extern crate tokio_proto as proto;
 // extern crate tokio_line as line;
 // extern crate tokio_middleware as middleware;
@@ -15,28 +13,48 @@ extern crate tokio_service;
 use rand::{Rng, thread_rng};
 use futures::stream::Stream;
 use tokio_core::reactor::Core;
-use tokio_core::reactor;
 use tokio_core::net::TcpListener;
-use tokio_timer::Timer;
 // use service::Service;
-use std::time::Duration;
 use std::io::{self, Write, BufReader, BufRead};
 use std::fs::File;
 
-struct Listener {
-    // socket: TcpListener,
-    quotes: Vec<String>
-}
+// https://github.com/tokio-rs/tokio-proto/blob/0bfe489f2bd97307024df8f0c7a7ed112f8253e5/examples/listen.rs
 
-impl Listener {
-    fn tick(&mut self) -> io::Result<Tick> {
-        while let Some(mut conn) = try!(self.socket.accept()) {
-            let quote = thread_rng().choose(&self.quotes).unwrap();
-            try!(conn.write_all(quote.as_bytes()));
+fn main() {
+    // initialize
+
+    // read configuration
+    println!("Reading recipes");
+    let recipes = read_recipes("data/whattoeat.txt");
+
+    // initialize listener parameters
+    println!("Starting recipes server...");
+    let mut lp = Core::new().unwrap();
+    // let handle = lp.handle();
+    let addr = "127.0.0.1:8899".parse().unwrap();
+
+    // Create new TCP listener
+    let listener = match TcpListener::bind(&addr, &lp.handle()) {
+        Ok(l) => l,
+        Err(e) => {
+            println!("something went wrong: {}", e);
+            std::process::exit(1);
         }
+    };
 
-        Ok(Tick::WouldBlock)
-    }
+    // create server
+    let clients = listener.incoming();
+    let answer = clients.and_then(|(socket, _peer_addr)| {
+        // tokio_core::io::write_all(socket, b"Hello!\n");
+        let onerecipe = thread_rng().choose(&recipes).unwrap();
+        tokio_core::io::write_all(socket, onerecipe.as_bytes())
+    });
+
+    let server = answer.for_each(|(_socket, _welcome)| {
+        Ok(())
+    });
+
+    lp.run(server).unwrap();
 }
 
 fn read_recipes(file: &str) -> Vec<String> {
@@ -60,60 +78,19 @@ fn read_recipes(file: &str) -> Vec<String> {
     recipes
 }
 
-// https://github.com/tokio-rs/tokio-proto/blob/0bfe489f2bd97307024df8f0c7a7ed112f8253e5/examples/listen.rs
-
-fn main() {
-    // read configuration
-    println!("Reading recipes");
-    let recipes = read_recipes("data/whattoeat.txt");
-
-    // initialize listener parameters
-    println!("Starting recipes server...");
-    let mut lp = Core::new().unwrap();
-    let handle = lp.handle();
-    let addr = "127.0.0.1:8899".parse().unwrap();
-
-    // Create the new TCP listener
-    let listener = TcpListener::bind(&addr, &lp.handle()).unwrap();
-
-    // let reactor = reactor::default().unwrap();
-
-//     reactor.handle().oneshot(|| {
-//         let listener = match TcpListener::bind(&addr) {
-//             Ok(l) => l,
-//             Err(e) => {
-//                 println!("Error creating listener: {}", e);
-//                 std::process::exit(1);
-//             }
-//         };
+// reactor when questioned
+// struct Listener {
+//     // socket: TcpListener,
+//     quotes: Vec<String>
+// }
 //
-//         reactor::schedule(Listener {socket: listener, quotes: quotes});
+// impl Listener {
+//     fn tick(&mut self) -> io::Result<Tick> {
+//         while let Some(mut conn) = try!(self.socket.accept()) {
+//             let quote = thread_rng().choose(&self.quotes).unwrap();
+//             try!(conn.write_all(quote.as_bytes()));
+//         }
 //
-//         Ok(())
-//     });
-//     reactor.run();
-
-    let clients = listener.incoming().map(move |(socket, addr)| {
-        (Listener {
-            quotes: recipes,
-        }.tick)
-    });
-
-    let handle = lp.handle();
-
-    let server = clients.for_each(|(client, addr)| {
-        handle.spawn(client.then(move |res| {
-            match res {
-                Ok((a, b)) => {
-                    println!("proxied {}/{} bytes for {}", a, b, addr)
-                }
-                Err(e) => println!("error for {}: {}", addr, e),
-            }
-            futures::finished(())
-        }));
-        Ok(())
-    });
-
-    lp.run(server).unwrap();
-
-}
+//         Ok(Tick::WouldBlock)
+//     }
+// }
