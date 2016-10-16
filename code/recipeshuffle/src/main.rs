@@ -60,6 +60,5 @@ fn read_recipes(file: &str) -> Vec<String> {
                 recipe.clear();
         }
     }
-    recipes.push(recipe);
     recipes
 }
