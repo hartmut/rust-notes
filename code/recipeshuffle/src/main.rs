@@ -34,6 +34,7 @@ fn main() {
     // create server
     let clients = listener.incoming();
     let answer = clients.and_then(|(socket, _peer_addr)| {
+        println!("got connection from {}", _peer_addr);
         let onerecipe = thread_rng().choose(&recipes).unwrap();
         tokio_core::io::write_all(socket, onerecipe.as_bytes())
     });
