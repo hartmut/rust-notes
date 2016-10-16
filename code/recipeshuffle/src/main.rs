@@ -54,14 +54,10 @@ fn read_recipes(file: &str) -> Vec<String> {
 
 //TODO rewrite for line structure
     for readline in BufReader::new(recipe_file).lines() {
-        if let Ok(line) = readline {
-            if line == "%" {
-                recipes.push(recipe.clone());
+        if let Ok(mut line) = readline {
+                line.push_str("\n\n");
+                recipes.push(line.clone());
                 recipe.clear();
-            }else {
-                recipe.push_str(&line);
-                recipe.push('\n');
-            }
         }
     }
     recipes.push(recipe);
