@@ -50,14 +50,15 @@ fn main() {
 fn read_recipes(file: &str) -> Vec<String> {
     let mut recipes = Vec::new();
     let recipe_file = File::open(file).unwrap();
-    let mut recipe = String::new();
 
-//TODO rewrite for line structure
     for readline in BufReader::new(recipe_file).lines() {
-        if let Ok(mut line) = readline {
-                line.push_str("\n\n");
-                recipes.push(line.clone());
-                recipe.clear();
+        if let Ok(line) = readline {
+            let splitvec: Vec<&str> = line.split("#").collect();
+            if splitvec[0] == "X" {
+                let mut recipe: String = splitvec[1].to_string();
+                recipe.push_str("\n\n");
+                recipes.push(recipe);
+            }
         }
     }
     recipes
