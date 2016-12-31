@@ -18,3 +18,7 @@ git pull
 echo "rust-by-example"
 cd ../rust-by-example
 git pull
+#echo "get documentations"
+#cd ../rust-doc
+#wget -rN https://doc.rust-lang.org/
+
