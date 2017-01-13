@@ -8,9 +8,12 @@ mod tests;
 
 use fileoperations::*;
 
+
+
 fn main() {
     println!("\nTest of Strings");
 
-    // let mut f = newreader("src/tests/testdata/testfile".to_string());
+    // BufReader Test
+    let mut f = newreader("src/tests/testdata/testfile".to_string());
 
 }
