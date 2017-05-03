@@ -1,3 +1,4 @@
+
 extern crate rand;
 extern crate futures;
 extern crate tokio_core;
@@ -39,9 +40,7 @@ fn main() {
         tokio_core::io::write_all(socket, onerecipe.as_bytes())
     });
 
-    let server = answer.for_each(|(_socket, _welcome)| {
-        Ok(())
-    });
+    let server = answer.for_each(|(_socket, _welcome)| Ok(()));
 
     // and let it run
     lp.run(server).unwrap();
