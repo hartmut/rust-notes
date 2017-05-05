@@ -1,0 +1,11 @@
+[package]
+name = "serdejson"
+version = "0.1.0"
+authors = ["hartmut <hartmut.prochaska@gmail.com>"]
+
+[dependencies]
+time = "0.1" # https://crates.io/crates/time
+uuid = { version = "*", features = ["serde", "v4"] } # https://crates.io/crates/uuid
+serde = "*" # https://crates.io/crates/serde
+serde_json = "*" # https://crates.io/crates/serde_json
+serde_derive = "*" # https://crates.io/crates/serde_derive
