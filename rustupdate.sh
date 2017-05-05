@@ -12,6 +12,9 @@ git pull
 echo "rust book"
 cd ../book
 git pull
+cd second-edition/
+mdbook build
+cd ..
 #
 echo "rust itself"
 cd ../rust
