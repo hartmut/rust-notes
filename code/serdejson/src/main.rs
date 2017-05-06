@@ -9,69 +9,42 @@ extern crate serde;
 
 // mods
 mod common;
+mod aspects;
 
 // uses
-use serde_json::{Value, Error};
-// use serde::de;
-use common::fileoperations::*;
+use std::collections::HashMap;
+
+
 
 // all the elemenets
 // updates from https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json
 
-// TODO design struct and read from file #NEXT
-// IDEA move this to the structure module? do I need this data anywhere else?
-
-#[derive(Serialize, Deserialize, Debug)]
-struct Element {
-    name: String,
-    appearance: String,
-    atomic_mass: f64,
-    boil: f64, // in Kelvin
-    category: String,
-    color: String,
-    density: f64,
-    discovered_by: String,
-    melt: f64, // in Kelvin
-    molar_heat: f64, // in Kelvin
-    named_by: String,
-    number: u32, // atomic number
-    period: u32,
-    phase: String,
-    source: String,
-    spectral_img: String,
-    summary: String,
-    symbol: String,
-    xpos: u32,
-    ypos: u32,
-}
-
-type ElementListVec = Vec<Element>;
-
-// read Elementlist from file
-fn read_elementlist_file() -> serde_json::Value {
-    // TODO send filename
-
-    let result = read_file_to_string("PeriodicTableJSON.json".to_string());
-
-    // ElementList
-    let e: Value = serde_json::from_str(&result).unwrap();
-    // let elementlist: ElementListVec = <std::vec::Vec<recipes::elements::Element> as Trait>::serde_json::from_str(&result).unwrap();
-    // let elementlist = match checker_elementlist {
-    //     Ok(elementlist) => elementlist,
-    //     Err(error) => {
-    //         panic!("somethings is wrong with the deserelization of the elementsfile: {:?}",
-    //                error)
-    //     }
-    // };
-    // elementlist
-    e
-}
 
 fn main() {
-    let elementlist = read_elementlist_file();
-    println!{"{} \n", elementlist};
-    // println!{"source: {}", elementlist["elements"]};
+    // first version
+    let elementlist = aspects::elementreading::read_elementlist_file();
+    println!{"{:?} \n", elementlist};
+    // access submap
+    let ehash = String::from("elements");
+    let evalue = elementlist.get(&ehash).unwrap();
+    println!{"{:?} \n", evalue};
+    // print first value of Vector
+    println!{"{:?} \n", evalue[0]};
 
+    // second version
+    // TODO hier weiter
+    // let elementlist2 = aspects::elementreading::read_elementlist_file2;
+    // println!{"{:?} \n", elementlist2};
+
+    // Vector
     let v = vec![1, 2, 3, 4];
     println!("{:?}", v);
+
+    // Hasmaps
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+    println!("{:?}", scores);
+
+
 }

@@ -88,7 +88,6 @@ pub fn newlinewriter(filename: String) -> LineWriter<File> {
 }
 
 // genericline  writeline function, returns length of written data
-// TODO better error handling in writeline
 pub fn writeline(f: &mut LineWriter<File>, output: &String) -> u64 {
     f.write(output.as_bytes()).unwrap() as u64;
     f.write('\n'.to_string().as_bytes()).unwrap() as u64
