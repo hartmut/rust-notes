@@ -22,29 +22,30 @@ use std::collections::HashMap;
 
 fn main() {
     // first version
-    let elementlist = aspects::elementreading::read_elementlist_file();
-    println!{"{:?} \n", elementlist};
+    // let elementlist = aspects::elementreading::read_elementlist_file();
+    // println!{"{:?} \n", elementlist};
     // access submap
-    let ehash = String::from("elements");
-    let evalue = elementlist.get(&ehash).unwrap();
-    println!{"{:?} \n", evalue};
+    // let ehash = String::from("elements");
+    // let evalue = elementlist.get(&ehash).unwrap();
+    // println!{"{:?} \n", evalue};
     // print first value of Vector
-    println!{"{:?} \n", evalue[0]};
+    // println!{"{:?} \n", evalue[0]};
 
     // second version
     // TODO hier weiter
-    // let elementlist2 = aspects::elementreading::read_elementlist_file2;
-    // println!{"{:?} \n", elementlist2};
+    let elementlist2 = aspects::elementreading::read_elementlist_file2;
+    println!{"{:?} \n", elementlist2};
 
     // Vector
-    let v = vec![1, 2, 3, 4];
-    println!("{:?}", v);
+    // let v = vec![1, 2, 3, 4];
+    // println!("{:?}", v);
 
     // Hasmaps
-    let mut scores = HashMap::new();
-    scores.insert(String::from("Blue"), 10);
-    scores.insert(String::from("Yellow"), 50);
-    println!("{:?}", scores);
+    // let mut scores = HashMap::new();
+    // scores.insert(String::from("Blue"), 10);
+    // scores.insert(String::from("Yellow"), 50);
+    // println!("{:?}", scores);
 
+    aspects::elementreading::create_example();
 
 }

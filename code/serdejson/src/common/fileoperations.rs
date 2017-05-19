@@ -139,3 +139,21 @@ pub fn writerecord(mut f: &mut LineWriter<File>, output: &String) -> u64 {
 pub fn closefile(mut f: &mut LineWriter<File>) {
     let flush_result = f.flush();
 }
+
+// write whole file
+pub fn write_string_to_file(filename: String, output: &String) -> u64 {
+    let path = Path::new(&filename);
+
+    // Open the path in write mode
+    let mut f = match File::create(&path) {
+        // The `description` method of `io::Error` returns a string that
+        // describes the error
+        Err(why) => panic!("couldn't open {}: {}", path.display(), why.description()),
+        Ok(file) => file,
+    };
+
+    // Read the file contents into a string, returns `io::Result<usize>`
+    let i = f.write(&mut output.as_bytes()).unwrap() as u64;
+    f.flush();
+    i
+}
