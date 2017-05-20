@@ -1,4 +1,3 @@
-
 // #![feature(proc_macro)]
 #[macro_use]
 
@@ -22,7 +21,7 @@ use std::collections::HashMap;
 
 fn main() {
     // first version
-    // let elementlist = aspects::elementreading::read_elementlist_file();
+    let elementlist = aspects::elementreading::read_elementlist_file();
     // println!{"{:?} \n", elementlist};
     // access submap
     // let ehash = String::from("elements");
@@ -33,8 +32,8 @@ fn main() {
 
     // second version
     // TODO hier weiter
-    let elementlist2 = aspects::elementreading::read_elementlist_file2;
-    println!{"{:?} \n", elementlist2};
+    let e: aspects::elementreading::Element = aspects::elementreading::read_elementlist_file2();
+    // println!{"{:?} \n", e};
 
     // Vector
     // let v = vec![1, 2, 3, 4];
