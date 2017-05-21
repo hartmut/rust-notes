@@ -68,6 +68,9 @@ pub fn read_elementlist_file_by_hashmap() {
     let ehash = String::from("appearance");
     let appearance: String = earray[0].get(&ehash).unwrap().to_string();
     println!("{:?}", appearance);
+    let ehash = String::from("atomic_mass");
+    let atomic_mass = earray[0].get(&ehash).unwrap().to_string();
+    println!("{:?}", atomic_mass);
 }
 
 pub fn read_elementlist_file_by_visiting() {
