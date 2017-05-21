@@ -20,31 +20,29 @@ use std::collections::HashMap;
 
 
 fn main() {
-    // first version
-    let elementlist = aspects::elementreading::read_elementlist_file();
-    // println!{"{:?} \n", elementlist};
-    // access submap
-    // let ehash = String::from("elements");
-    // let evalue = elementlist.get(&ehash).unwrap();
-    // println!{"{:?} \n", evalue};
-    // print first value of Vector
-    // println!{"{:?} \n", evalue[0]};
 
-    // second version
-    // TODO hier weiter
-    let e: aspects::elementreading::Element = aspects::elementreading::read_elementlist_file2();
+    // create easy examplefile, how does it look?
+    aspects::elementreading::create_example();
+
+    // ## Sequence start
+    // first version naive interpretation
+    let elementlist = aspects::elementreading::read_elementlist_file();
+    println!{"{:?} \n", elementlist};
+    // access submap
+    let ehash = String::from("elements");
+    let evalue = elementlist.get(&ehash).unwrap();
+    println!{"{:?} \n", evalue};
+    // print first value of Vector
+    println!{"{:?} \n", evalue[0]};
+    // ## Sequence stop
+
+    // second version by HashMap
+    // let e: aspects::elementreading::Element =
+    aspects::elementreading::read_elementlist_file_by_hashmap();
     // println!{"{:?} \n", e};
 
-    // Vector
-    // let v = vec![1, 2, 3, 4];
-    // println!("{:?}", v);
-
-    // Hasmaps
-    // let mut scores = HashMap::new();
-    // scores.insert(String::from("Blue"), 10);
-    // scores.insert(String::from("Yellow"), 50);
-    // println!("{:?}", scores);
-
-    aspects::elementreading::create_example();
+    // TODO hier weiter
+    // third version, does it get better with visitors?
+    aspects::elementreading::read_elementlist_file_by_visiting();
 
 }

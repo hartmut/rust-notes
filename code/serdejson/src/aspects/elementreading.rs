@@ -48,20 +48,30 @@ pub fn read_elementlist_file() -> serde_json::Value {
     e
 }
 
-pub fn read_elementlist_file2() -> Element {
+pub fn read_elementlist_file_by_hashmap() {
 
-    let result = read_file_to_string("src/PeriodicTableJSON.json".to_string());
+    println!("at first we get the file as a string", );
+    let mut result = read_file_to_string("src/PeriodicTableJSON.json".to_string());
     // ElementList
-    println!{"{:?} \n", result};
+    println!{"{:?} \n", &result};
 
-    let mut e: ElementListVec = serde_json::from_str(&result).unwrap();
-    // let ehash = String::from("elements");
-    // let evalue = e.get(&ehash).unwrap();
-    // let ref evalue = e[0];
-    println!{"{:?} \n", e};
-    println!{"{:?} \n", e[0]};
-    // evalue
-    e.pop().unwrap()
+    println!("This should be an array", );
+    let mut e: Value = serde_json::from_str(&result).unwrap();
+    let ehash = String::from("elements");
+    let earray = e.get(&ehash).unwrap();
+    println!{"{:?} \n", earray};
+
+    println!("and now we geht the first element which is a HashMap", );
+    println!("{:?}\n", earray[0]);
+
+    println!("lets take a look at the appearance of the first element of the array", );
+    let ehash = String::from("appearance");
+    let appearance: String = earray[0].get(&ehash).unwrap().to_string();
+    println!("{:?}", appearance);
+}
+
+pub fn read_elementlist_file_by_visiting() {
+    println!("just a stub now", );
 }
 
 pub fn create_example() {
@@ -95,10 +105,11 @@ pub fn create_example() {
         ypos: 1,
     };
 
+    // write one element filename
     let f: String = serde_json::to_string(&e).unwrap();
     let b0: u64 = write_string_to_file("src/testout.json".to_string(), &f);
 
-    // let f = e.clone();
+    // write two element file, TODO
     let mut v: ElementListVec = vec![e];
     let g: String = serde_json::to_string(&v).unwrap();
     let b1: u64 = write_string_to_file("src/testout1.json".to_string(), &g);
