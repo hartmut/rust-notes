@@ -10,10 +10,12 @@ pub struct Element {
     atomic_mass: f64,
     boil: f64, // in Kelvin
     category: String,
+    #[serde(default)]
     color: String,
     density: f64,
     discovered_by: String,
     melt: f64, // in Kelvin
+    #[serde(default)]
     molar_heat: f64, // in Kelvin
     named_by: String,
     number: String,
@@ -57,7 +59,7 @@ pub fn read_elementlist_file_by_hashmap() {
 
     println!("This should be an array", );
     let mut e: Value = serde_json::from_str(&result).unwrap();
-    let ehash = String::from("elements");
+    let mut ehash = String::from("elements");
     let earray = e.get(&ehash).unwrap();
     println!{"{:?} \n", earray};
 
@@ -65,10 +67,10 @@ pub fn read_elementlist_file_by_hashmap() {
     println!("{:?}\n", earray[0]);
 
     println!("lets take a look at the appearance of the first element of the array", );
-    let ehash = String::from("appearance");
+    ehash = String::from("appearance");
     let appearance: String = earray[0].get(&ehash).unwrap().to_string();
     println!("{:?}", appearance);
-    let ehash = String::from("atomic_mass");
+    ehash = String::from("atomic_mass");
     let atomic_mass = earray[0].get(&ehash).unwrap().to_string();
     println!("{:?}", atomic_mass);
 }
