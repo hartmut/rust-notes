@@ -3,7 +3,7 @@ use serde_json::{Value, Error};
 use serde_json;
 use common::fileoperations::*;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Element {
     name: String,
     appearance: String,
@@ -73,6 +73,20 @@ pub fn read_elementlist_file_by_hashmap() {
     println!("{:?}", atomic_mass);
 }
 
+pub fn read_elementlist_file_at_once() -> ElementListVec {
+    let result = read_file_to_string("src/testout2.json".to_string());
+    let e: Result<ElementListVec, Error> = serde_json::from_str(&result);
+    // let result =
+    match e {
+        Ok(elementlist) => elementlist,
+        Err(error) => {
+            println!("somethings is wrong with the deserialization of the elementsfile: {:?}",
+                     error);
+            Vec::new()
+        }
+    }
+}
+
 pub fn read_elementlist_file_by_visiting() {
     println!("just a stub now", );
 }
@@ -109,11 +123,12 @@ pub fn create_example() {
     };
 
     // write one element filename
-    let f: String = serde_json::to_string(&e).unwrap();
+    let f: String = serde_json::to_string(&e.clone()).unwrap();
     let b0: u64 = write_string_to_file("src/testout.json".to_string(), &f);
 
     // write two element file, TODO
-    let mut v: ElementListVec = vec![e];
+    let mut v: ElementListVec = vec![e.clone()];
+    v.push(e.clone());
     let g: String = serde_json::to_string(&v).unwrap();
     let b1: u64 = write_string_to_file("src/testout1.json".to_string(), &g);
 }

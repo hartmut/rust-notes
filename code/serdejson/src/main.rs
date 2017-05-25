@@ -38,11 +38,17 @@ fn main() {
 
     // second version by HashMap
     // let e: aspects::elementreading::Element =
-    aspects::elementreading::read_elementlist_file_by_hashmap();
-    // println!{"{:?} \n", e};
+    let elementlist = aspects::elementreading::read_elementlist_file_by_hashmap();
+    println!{"{:?} \n", elementlist};
+
+    // third version, automatic import of full file, by using testout1.json
+    println!("Elementlist in one reading \n", );
+    let e = aspects::elementreading::read_elementlist_file_at_once();
+    println!("{:?}", e);
+    println!("works, but not with the original file, because of null values and empty f64 values", );
 
     // TODO hier weiter
-    // third version, does it get better with visitors?
+    // fourth version, does it get better with visitors?
     aspects::elementreading::read_elementlist_file_by_visiting();
 
 }
