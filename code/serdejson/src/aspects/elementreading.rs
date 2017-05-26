@@ -4,19 +4,45 @@ use serde_json;
 use common::fileoperations::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct OptionElement {
+    name: String,
+    appearance: String,
+    atomic_mass: f64,
+    boil: f64,
+    category: String,
+    #[serde(default)]
+    color: Option<String>,
+    density: f64,
+    discovered_by: String,
+    melt: f64,
+    #[serde(default)]
+    molar_heat: Option<f64>,
+    named_by: Option<String>,
+    number: String,
+    period: u32,
+    phase: String,
+    source: String,
+    spectral_img: String,
+    summary: String,
+    symbol: String,
+    xpos: u32,
+    ypos: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Element {
     name: String,
     appearance: String,
     atomic_mass: f64,
-    boil: f64, // in Kelvin
+    boil: f64,
     category: String,
     #[serde(default)]
     color: String,
     density: f64,
     discovered_by: String,
-    melt: f64, // in Kelvin
+    melt: f64,
     #[serde(default)]
-    molar_heat: f64, // in Kelvin
+    molar_heat: f64,
     named_by: String,
     number: String,
     period: u32,
@@ -29,6 +55,7 @@ pub struct Element {
     ypos: u32,
 }
 
+type OptionElementListVec = Vec<OptionElement>;
 type ElementListVec = Vec<Element>;
 
 // read Elementlist from file
@@ -38,7 +65,7 @@ pub fn read_elementlist_file() -> serde_json::Value {
 
     // ElementList
     let e: Value = serde_json::from_str(&result).unwrap();
-    // let elementlist: ElementListVec = <std::vec::Vec<recipes::elements::Element> as Trait>::serde_json::from_str(&result).unwrap();
+    // let elementlist: OptionElementListVec = <std::vec::Vec<recipes::elements::OptionElement> as Trait>::serde_json::from_str(&result).unwrap();
     // let elementlist = match checker_elementlist {
     //     Ok(elementlist) => elementlist,
     //     Err(error) => {
@@ -75,19 +102,42 @@ pub fn read_elementlist_file_by_hashmap() {
     println!("{:?}", atomic_mass);
 }
 
+// fn Element_Builder_from_OptElement(input: OptionElement) -> Element {
+//
+// }
+
 pub fn read_elementlist_file_at_once() -> ElementListVec {
+
     let result = read_file_to_string("src/testout2.json".to_string());
-    let e: Result<ElementListVec, Error> = serde_json::from_str(&result);
-    // let result =
-    match e {
+    let e: Result<OptionElementListVec, Error> = serde_json::from_str(&result);
+
+    let OptElementList = match e {
         Ok(elementlist) => elementlist,
         Err(error) => {
-            println!("somethings is wrong with the deserialization of the elementsfile: {:?}",
-                     error);
-            Vec::new()
+            panic!("somethings is wrong with the deserialization of the elementsfile: {:?}",
+                   error);
+        }
+    };
+
+    // convert the structure with options to the useable structure
+
+    let mut iterator = OptElementList.iter();
+
+    loop {
+        match iterator.next() {
+            Some(x) => {
+                println!("{:?}", x);
+            }
+            None => break,
         }
     }
+
+    Vec::new()
+
 }
+
+
+
 
 pub fn read_elementlist_file_by_visiting() {
     println!("just a stub now", );
@@ -95,7 +145,7 @@ pub fn read_elementlist_file_by_visiting() {
 
 pub fn create_example() {
 
-    let e: Element = Element {
+    let e: OptionElement = OptionElement {
         name: "Helium".to_string(),
         appearance: "colorless gas, exhibiting a red-orange glow when placed in a high-voltage \
                      electric field"
@@ -103,12 +153,12 @@ pub fn create_example() {
         atomic_mass: 4.0026022,
         boil: 4.222,
         category: "noble gas".to_string(),
-        color: "".to_string(),
+        color: Some("".to_string()),
         density: 0.1786,
         discovered_by: "Pierre Janssen".to_string(),
         melt: 0.95,
-        molar_heat: 0.0,
-        named_by: "".to_string(),
+        molar_heat: Some(0.0),
+        named_by: Some("".to_string()),
         number: "2".to_string(),
         period: 1,
         phase: "Gas".to_string(),
@@ -129,7 +179,7 @@ pub fn create_example() {
     let b0: u64 = write_string_to_file("src/testout.json".to_string(), &f);
 
     // write two element file, TODO
-    let mut v: ElementListVec = vec![e.clone()];
+    let mut v: OptionElementListVec = vec![e.clone()];
     v.push(e.clone());
     let g: String = serde_json::to_string(&v).unwrap();
     let b1: u64 = write_string_to_file("src/testout1.json".to_string(), &g);

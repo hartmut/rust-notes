@@ -37,7 +37,6 @@ fn main() {
     // ## Sequence stop
 
     // second version by HashMap
-    // let e: aspects::elementreading::Element =
     let elementlist = aspects::elementreading::read_elementlist_file_by_hashmap();
     println!{"{:?} \n", elementlist};
 
