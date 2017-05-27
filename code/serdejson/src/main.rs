@@ -46,8 +46,11 @@ fn main() {
     println!("{:?}", e);
     println!("works, but not with the original file, because of null values and empty f64 values", );
 
-    // TODO hier weiter
-    // fourth version, does it get better with visitors?
-    aspects::elementreading::read_elementlist_file_by_visiting();
+    // fourth version, does it get better with using deserialize_with?
+    // yes it works
+    // TODO convert number from string to u16
+    let e = aspects::elementreading::read_elementlist_file_and_resolve_nulls();
+    println!("{:?}\n\n\n", e);
+    println!("{:?}\n", e[2]);
 
 }

@@ -1,6 +1,7 @@
 // uses
 use serde_json::{Value, Error};
 use serde_json;
+use serde::de::{self, Deserialize, Deserializer};
 use common::fileoperations::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -32,24 +33,36 @@ pub struct OptionElement {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Element {
     name: String,
+    #[serde(deserialize_with="parse_string")]
     appearance: String,
     atomic_mass: f64,
+    #[serde(deserialize_with="parse_f64")]
     boil: f64,
+    #[serde(deserialize_with="parse_string")]
     category: String,
-    #[serde(default)]
+    #[serde(deserialize_with="parse_string")]
     color: String,
+    #[serde(deserialize_with="parse_f64")]
     density: f64,
+    #[serde(deserialize_with="parse_string")]
     discovered_by: String,
+    #[serde(deserialize_with="parse_f64")]
     melt: f64,
-    #[serde(default)]
+    #[serde(deserialize_with="parse_f64")]
     molar_heat: f64,
+    #[serde(deserialize_with="parse_string")]
     named_by: String,
     number: String,
     period: u32,
+    #[serde(deserialize_with="parse_string")]
     phase: String,
+    #[serde(deserialize_with="parse_string")]
     source: String,
+    #[serde(deserialize_with="parse_string")]
     spectral_img: String,
+    #[serde(deserialize_with="parse_string")]
     summary: String,
+    #[serde(deserialize_with="parse_string")]
     symbol: String,
     xpos: u32,
     ypos: u32,
@@ -136,11 +149,29 @@ pub fn read_elementlist_file_at_once() -> ElementListVec {
 
 }
 
+fn parse_string<'de, D>(d: D) -> Result<String, D::Error>
+    where D: Deserializer<'de>
+{
+    Deserialize::deserialize(d).map(|x: Option<_>| x.unwrap_or("".to_string()))
+}
 
+fn parse_f64<'de, D>(d: D) -> Result<f64, D::Error>
+    where D: Deserializer<'de>
+{
+    Deserialize::deserialize(d).map(|x: Option<_>| x.unwrap_or(0.0))
+}
 
+pub fn read_elementlist_file_and_resolve_nulls() -> ElementListVec {
+    let result = read_file_to_string("src/PeriodicTableJSON-full.json".to_string());
+    let e: Result<ElementListVec, Error> = serde_json::from_str(&result);
 
-pub fn read_elementlist_file_by_visiting() {
-    println!("just a stub now", );
+    match e {
+        Ok(elementlist) => elementlist,
+        Err(error) => {
+            panic!("somethings is wrong with the deserialization of the elementsfile: {:?}",
+                   error);
+        }
+    }
 }
 
 pub fn create_example() {
