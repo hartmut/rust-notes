@@ -51,6 +51,6 @@ fn main() {
     // TODO convert number from string to u16
     let e = aspects::elementreading::read_elementlist_file_and_resolve_nulls();
     println!("{:?}\n\n\n", e);
-    println!("{:?}\n", e[2]);
+    println!("{:?}\n", e[5]);
 
 }

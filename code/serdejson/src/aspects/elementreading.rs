@@ -3,6 +3,8 @@ use serde_json::{Value, Error};
 use serde_json;
 use serde::de::{self, Deserialize, Deserializer};
 use common::fileoperations::*;
+use std::fmt::Display;
+use std::str::FromStr;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OptionElement {
@@ -52,6 +54,10 @@ pub struct Element {
     molar_heat: f64,
     #[serde(deserialize_with="parse_string")]
     named_by: String,
+    // TODO howto convert a string in json to a u32 in the structure automaticaly
+    // #[serde(deserialize_with="parse_element_number")]
+    // #[serde(bound(deserialize = "u32: FromStr, <u32 as Trait>::Err: Display"))]
+    // number: u32,
     number: String,
     period: u32,
     #[serde(deserialize_with="parse_string")]
@@ -160,6 +166,15 @@ fn parse_f64<'de, D>(d: D) -> Result<f64, D::Error>
 {
     Deserialize::deserialize(d).map(|x: Option<_>| x.unwrap_or(0.0))
 }
+
+// TODO same todo as above :)
+// fn parse_element_number<'de, S, D>(d: D) -> Result<u32, D::Error>
+//     where D: Deserializer<'de>,
+//           S: FromStr
+// {
+//     let s: String = Deserialize::deserialize(deserializer)?;
+//     u32::from_str(&s).map_err(de::Error::custom)
+// }
 
 pub fn read_elementlist_file_and_resolve_nulls() -> ElementListVec {
     let result = read_file_to_string("src/PeriodicTableJSON-full.json".to_string());
