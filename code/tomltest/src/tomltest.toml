@@ -1,0 +1,34 @@
+# Experimental Simulator of a cooperative solar system economy.
+# Copyright (C) 2016  Hartmut Prochaska
+# See doc/LICENSE for licensing information
+
+[global]
+# duration of tick in seconds, one tick is 6h in worldtime
+# TODO define length of tick
+tick = 2
+# needed O2 in liter per player and 6 hour tick, later value per hour
+# https://www.quora.com/How-much-oxygen-does-the-average-person-burn-in-a-day-What-volume-of-air-is-that
+# using the nasa values, per hour a person will need about 25l, could be higher if exercising => we could improve the model later
+02player = 150
+
+[playerdata]
+storageMethod ="file"
+datafile="src/data/player.json"
+
+[structuredata]
+storageMethod="file"
+datafile_station="src/data/station.json"
+
+[moduledata]
+storageMethod="file"
+datafile="src/data/module.json"
+
+[elements]
+storageMethod="file"
+datafile="src/data/PeriodicTableJSON-cleaned.json"
+#source is github repository https://github.com/Bowserinator/Periodic-Table-JSON, created by Bowserinator
+source="https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json"
+
+[componentdata]
+storageMethod="file"
+datafile="src/data/components.json"

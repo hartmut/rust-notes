@@ -1,0 +1,71 @@
+//! An example showing off the usage of `Deserialize` to automatically decode
+//! TOML into a Rust `struct`
+
+#![deny(warnings)]
+extern crate toml;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
+
+/// This is what we're going to decode into. Each field is optional, meaning
+/// that it doesn't have to be present in TOML.
+#[derive(Debug, Deserialize)]
+struct Config {
+    global_string: Option<String>,
+    global_integer: Option<u64>,
+    tick: Option<u32>,
+    o2player: Option<u32>,
+    server: Option<ServerConfig>,
+    peers: Option<Vec<PeerConfig>>,
+    structure: Option<ConfigData>,
+    player: Option<ConfigData>,
+}
+
+/// Sub-structs are decoded from tables, so this will decode from the `[server]`
+/// table.
+///
+/// Again, each field is optional, meaning they don't have to be present.
+#[derive(Debug, Deserialize)]
+struct ServerConfig {
+    ip: Option<String>,
+    port: Option<u64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct PeerConfig {
+    ip: Option<String>,
+    port: Option<u64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct ConfigData {
+    storagemethod: Option<String>,
+    datafile: Option<String>,
+    source: Option<String>,
+}
+
+fn main() {
+    let toml_str = r#"
+        global_string = "test"
+        global_integer = 5
+        tick = 2
+        02player = 150
+        [server]
+        ip = "127.0.0.1"
+        port = 80
+        [[peers]]
+        ip = "127.0.0.1"
+        port = 8080
+        [[peers]]
+        ip = "127.0.0.1"
+        [player]
+        storagemethod="file"
+        datafile="src/data/player.json"
+        [structure]
+        storagemethod="file"
+        datafile="src/data/station.json"
+    "#;
+
+    let decoded: Config = toml::from_str(toml_str).unwrap();
+    println!("{:#?}", decoded);
+}
