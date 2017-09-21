@@ -5,3 +5,4 @@ authors = ["hartmut <hartmut.prochaska@gmail.com>"]
 
 [dependencies]
 specs = "0.9"
+specs-derive = "0.1.0"
