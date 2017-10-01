@@ -5,7 +5,7 @@ extern crate specs;
 
 use specs::{Component, VecStorage};
 use specs::World;
-use specs::{WriteStorage, ReadStorage, System};
+use specs::{WriteStorage, ReadStorage, System, Fetch};
 use specs::RunNow;
 // use specs_derive;
 use specs::DispatcherBuilder;
@@ -41,6 +41,27 @@ impl<'a> System<'a> for UpdatePos {
     }
 }
 
+struct UpdatePos2;
+
+impl<'a> System<'a> for UpdatePos2 {
+    type SystemData = (Fetch<'a, DeltaTime>, ReadStorage<'a, Velocity>, WriteStorage<'a, Position>);
+
+    fn run(&mut self, data: Self::SystemData) {
+        use specs::Join;
+        let (delta, vel, mut pos) = data;
+
+        // `Fetch` implements `Deref`, so it
+        // coerces to `&DeltaTime`.
+        let delta = delta.0;
+
+        for (vel, pos) in (&vel, &mut pos).join() {
+            pos.x += vel.x * delta;
+            pos.y += vel.y * delta;
+            println!("{:?} and {:?}", &pos, &vel);
+        }
+    }
+}
+
 #[derive(Debug)]
 // #[derive(Component,Debug)]
 // #[component(VecStorage)]
@@ -63,6 +84,9 @@ impl Component for Velocity {
     type Storage = VecStorage<Self>;
 }
 
+#[derive(Debug)]
+struct DeltaTime(f32);
+
 fn main() {
     // initialize
     let mut world = World::new();
@@ -76,10 +100,17 @@ fn main() {
         .with(Velocity { x: 0.1, y: 0.2 })
         .build();
 
+    // Resources
+    world.add_resource(DeltaTime(0.05)); // Let's use some start value
+    {
+        let mut delta = world.write_resource::<DeltaTime>();
+        *delta = DeltaTime(0.04);
+    }
+
     // dispatcher
     let mut dispatcher = DispatcherBuilder::new()
         .add(HelloWorld, "hello_world", &[])
-        .add(UpdatePos, "update_pos", &["hello_world"])
+        .add(UpdatePos2, "update_pos", &["hello_world"])
         .build();
     dispatcher.dispatch(&mut world.res);
 
