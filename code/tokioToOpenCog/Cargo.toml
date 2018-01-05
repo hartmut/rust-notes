@@ -1,0 +1,10 @@
+[package]
+name = "tokioToOpenCog"
+version = "0.1.0"
+authors = ["hartmut <hartmut.prochaska@gmail.com>"]
+
+[dependencies]
+futures = "*"
+tokio-core = "*"
+tokio-io = "*"
+tokio-proto = "*"
