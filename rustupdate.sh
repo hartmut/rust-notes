@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ..
+cd ~/projects
 #
 echo "blog.rust-lang.org"
 cd blog.rust-lang.org
@@ -26,4 +26,16 @@ git pull
 #
 echo "rust-by-example"
 cd ../rust-by-example
+git pull
+#
+echo "amethyst"
+cd ../amethyst
+git pull
+#
+echo "specs"
+cd ../specs
+git pull
+# 
+echo "playform"
+cd ../playform
 git pull

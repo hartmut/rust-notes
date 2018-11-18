@@ -1,0 +1,7 @@
+[package]
+name = "check_service"
+version = "0.1.0"
+authors = ["hartmut <hartmut.prochaska@gmail.com>"]
+
+[dependencies]
+reqwest = "*" # https://crates.io/crates/reqwest
