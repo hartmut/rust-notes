@@ -35,7 +35,3 @@ git pull
 echo "specs"
 cd ../specs
 git pull
-# 
-echo "playform"
-cd ../playform
-git pull
