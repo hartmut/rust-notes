@@ -1,5 +1,5 @@
 [package]
-name = "atomspace bindgen test"
+name = "atomspacebindgentest"
 version = "0.1.0"
 authors = ["hartmut <hartmut.prochaska@gmail.com>"]
 build = "build.rs"
